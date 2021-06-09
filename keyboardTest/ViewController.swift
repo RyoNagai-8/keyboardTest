@@ -17,6 +17,15 @@ class ViewController: UIViewController {
         testTableView.delegate = self
         testTableView.dataSource = self
         
+        //画面余白をタップした時の処理
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.didTapView))
+        view.addGestureRecognizer(tapGestureRecognizer)
+        
+    }
+    
+    @objc func didTapView() {
+        view.endEditing(true)
+        //self.view.becomeFirstResponder()
     }
 
 
@@ -24,7 +33,7 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return 5
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
