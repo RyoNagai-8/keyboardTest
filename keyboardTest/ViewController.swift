@@ -18,7 +18,6 @@ class ViewController: UIViewController {
         testTableView.dataSource = self
         
         //画面余白をタップした時の処理
-        //テスト
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.didTapView))
         view.addGestureRecognizer(tapGestureRecognizer)
         
