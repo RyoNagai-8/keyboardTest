@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var testTableView: UITableView!
     var addButtonItem: UIBarButtonItem!//追加
     var deleteButtonItem: UIBarButtonItem!//削除
+    var numberCells: Int = 0//セルの数
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,9 +23,9 @@ class ViewController: UIViewController {
         //画面余白をタップした時の処理
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.didTapView))
         view.addGestureRecognizer(tapGestureRecognizer)
-        
+        //追加
         addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
-        
+        //削除
         deleteButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonPressed(_:)))
         
         self.navigationItem.rightBarButtonItem = addButtonItem
@@ -38,7 +39,12 @@ class ViewController: UIViewController {
     }
     
     @objc func addButtonPressed(_ sender: UIBarButtonItem) {
-        print("add")
+        numberCells += 1
+        //追加するデータに対応するインデックスパスを取得する
+        let indexPath = IndexPath(row: numberCells - 1, section: 0)
+        //追加したデータに対応するセルを挿入する
+        testTableView.insertRows(at: [indexPath], with: .automatic)
+        print("add:\(numberCells)")
     }
     
     @objc func deleteButtonPressed(_ sender: UIBarButtonItem) {
@@ -48,9 +54,9 @@ class ViewController: UIViewController {
 
 }
 
-extension ViewController: UITableViewDelegate,UITableViewDataSource {
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return numberCells
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
