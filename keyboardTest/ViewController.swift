@@ -10,6 +10,8 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var testTableView: UITableView!
+    var addButtonItem: UIBarButtonItem!//追加
+    var deleteButtonItem: UIBarButtonItem!//削除
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,11 +23,26 @@ class ViewController: UIViewController {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.didTapView))
         view.addGestureRecognizer(tapGestureRecognizer)
         
+        addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
+        
+        deleteButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonPressed(_:)))
+        
+        self.navigationItem.rightBarButtonItem = addButtonItem
+        self.navigationItem.leftBarButtonItem = deleteButtonItem
+        
     }
     
     @objc func didTapView() {
         view.endEditing(true)
         //self.view.becomeFirstResponder()
+    }
+    
+    @objc func addButtonPressed(_ sender: UIBarButtonItem) {
+        print("add")
+    }
+    
+    @objc func deleteButtonPressed(_ sender: UIBarButtonItem) {
+        print("delete")
     }
 
 
