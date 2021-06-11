@@ -13,7 +13,7 @@ class ViewController: UIViewController {
     var addButtonItem: UIBarButtonItem!//追加
     var deleteButtonItem: UIBarButtonItem!//削除
     var numberCells: Int = 0//セルの数
-    var checkBox: Bool!
+    var checkBox: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,17 +59,38 @@ class ViewController: UIViewController {
 
 }
 
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
+extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableViewCellDelegate {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return numberCells
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = testTableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
+        let cell = testTableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! ListTableViewCell
+        
+        cell.delegate = self
+        
+        cell.checkBoxButton.isSelected = checkBox
         
         cell.backgroundColor = .green
         
         return cell
+    }
+    
+    func checkBoxToggle(sender: ListTableViewCell) {
+        if let selectedIndexPath = testTableView.indexPath(for: sender){
+            
+            if checkBox == false {
+                checkBox = true
+                print("push\(selectedIndexPath.row):true")
+            } else {
+                checkBox = false
+                print("push\(selectedIndexPath.row):false")
+            }
+            
+           testTableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+
+        }
     }
     
     

@@ -45,10 +45,14 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" image="square" catalog="system"/>
                                                     <state key="selected" image="checkmark.square" catalog="system"/>
+                                                    <connections>
+                                                        <action selector="checkToggled:" destination="iao-CA-pS1" eventType="touchUpInside" id="aPf-ru-JO7"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="checkBoxButton" destination="uFA-ro-hZU" id="3nz-Rt-c5Y"/>
                                             <outlet property="testTextField" destination="ejS-ca-ogo" id="e22-pr-niQ"/>
                                         </connections>
                                     </tableViewCell>
