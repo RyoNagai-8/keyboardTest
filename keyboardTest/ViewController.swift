@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     var addButtonItem: UIBarButtonItem!//追加
     var deleteButtonItem: UIBarButtonItem!//削除
     var numberCells: Int = 0//セルの数
+    var checkBox: Bool!
     
     override func viewDidLoad() {
         super.viewDidLoad()
