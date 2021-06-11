@@ -6,10 +6,15 @@
 //
 
 import UIKit
+import CoreData
 
 class ViewController: UIViewController {
 
     @IBOutlet weak var testTableView: UITableView!
+    var addButtonItem: UIBarButtonItem!//追加
+    var deleteButtonItem: UIBarButtonItem!//削除
+    var check = [Item]()
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +25,13 @@ class ViewController: UIViewController {
         //画面余白をタップした時の処理
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.didTapView))
         view.addGestureRecognizer(tapGestureRecognizer)
+        //追加
+        addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
+        //削除
+        deleteButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteButtonPressed(_:)))
+        
+        self.navigationItem.rightBarButtonItem = addButtonItem
+        self.navigationItem.leftBarButtonItem = deleteButtonItem
         
     }
     
@@ -27,21 +39,60 @@ class ViewController: UIViewController {
         view.endEditing(true)
         //self.view.becomeFirstResponder()
     }
+    
+    @objc func addButtonPressed(_ sender: UIBarButtonItem) {
+        //DataModelにデータを入力する。
+        let newItem = Item(context: self.context)
+        newItem.check = false
+        self.check.append(newItem)
+        //追加するデータに対応するインデックスパスを取得する
+        let indexPath = IndexPath(row: check.count - 1, section: 0)
+        //追加したデータに対応するセルを挿入する
+        testTableView.insertRows(at: [indexPath], with: .automatic)
+        //追加したセル
+        let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
+        //追加したセルのテキストフィールドをファーストレスポンダにする
+        cell?.testTextField.becomeFirstResponder()
+        print("add:\(check.count)")
+    }
+    
+    @objc func deleteButtonPressed(_ sender: UIBarButtonItem) {
+        print("delete")
+    }
 
 
 }
 
-extension ViewController: UITableViewDelegate,UITableViewDataSource {
+extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableViewCellDelegate {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return check.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = testTableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
+        let cell = testTableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! ListTableViewCell
+        
+        cell.delegate = self
+        
+        print("indexpath:\(indexPath.row)")
+        
+        cell.checkBoxButton.isSelected = check[indexPath.row].check
+        
+        cell.testTextField.text = "test"
         
         cell.backgroundColor = .green
         
         return cell
+    }
+    
+    func checkBoxToggle(sender: ListTableViewCell) {
+        if let selectedIndexPath = testTableView.indexPath(for: sender){
+            
+            check[selectedIndexPath.row].check = !check[selectedIndexPath.row].check
+            
+           testTableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+
+        }
     }
     
     
