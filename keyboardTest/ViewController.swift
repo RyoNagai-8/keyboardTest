@@ -78,6 +78,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         
         cell.checkBoxButton.isSelected = check[indexPath.row].check
         
+        cell.testTextField.text = "test"
+        
         cell.backgroundColor = .green
         
         return cell
