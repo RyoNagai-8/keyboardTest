@@ -44,6 +44,10 @@ class ViewController: UIViewController {
         let indexPath = IndexPath(row: numberCells - 1, section: 0)
         //追加したデータに対応するセルを挿入する
         testTableView.insertRows(at: [indexPath], with: .automatic)
+        //追加したセル
+        let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
+        //追加したセルのテキストフィールドをファーストレスポンダにする
+        cell?.testTextField.becomeFirstResponder()
         print("add:\(numberCells)")
     }
     
