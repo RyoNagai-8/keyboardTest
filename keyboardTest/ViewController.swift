@@ -13,8 +13,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var testTableView: UITableView!
     var addButtonItem: UIBarButtonItem!//追加
     var deleteButtonItem: UIBarButtonItem!//削除
-    var numberCells: Int = 0//セルの数
-    var checkBox: Bool = false
+    var check = [Item]()
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,16 +41,19 @@ class ViewController: UIViewController {
     }
     
     @objc func addButtonPressed(_ sender: UIBarButtonItem) {
-        numberCells += 1
+        //DataModelにデータを入力する。
+        let newItem = Item(context: self.context)
+        newItem.check = false
+        self.check.append(newItem)
         //追加するデータに対応するインデックスパスを取得する
-        let indexPath = IndexPath(row: numberCells - 1, section: 0)
+        let indexPath = IndexPath(row: check.count - 1, section: 0)
         //追加したデータに対応するセルを挿入する
         testTableView.insertRows(at: [indexPath], with: .automatic)
         //追加したセル
         let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
         //追加したセルのテキストフィールドをファーストレスポンダにする
         cell?.testTextField.becomeFirstResponder()
-        print("add:\(numberCells)")
+        print("add:\(check.count)")
     }
     
     @objc func deleteButtonPressed(_ sender: UIBarButtonItem) {
@@ -63,7 +66,7 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableViewCellDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return numberCells
+        return check.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -71,7 +74,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         
         cell.delegate = self
         
-        cell.checkBoxButton.isSelected = checkBox
+        print("indexpath:\(indexPath.row)")
+        
+        cell.checkBoxButton.isSelected = check[indexPath.row].check
         
         cell.backgroundColor = .green
         
@@ -81,13 +86,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
     func checkBoxToggle(sender: ListTableViewCell) {
         if let selectedIndexPath = testTableView.indexPath(for: sender){
             
-            if checkBox == false {
-                checkBox = true
-                print("push\(selectedIndexPath.row):true")
-            } else {
-                checkBox = false
-                print("push\(selectedIndexPath.row):false")
-            }
+            check[selectedIndexPath.row].check = !check[selectedIndexPath.row].check
             
            testTableView.reloadRows(at: [selectedIndexPath], with: .automatic)
 
