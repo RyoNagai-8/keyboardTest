@@ -9,7 +9,7 @@ import UIKit
 import CoreData
 
 class ViewController: UIViewController {
-
+    
     @IBOutlet weak var testTableView: UITableView!
     var addButtonItem: UIBarButtonItem!//追加
     var deleteButtonItem: UIBarButtonItem!//削除
@@ -24,8 +24,8 @@ class ViewController: UIViewController {
         testTableView.dataSource = self
         
         //画面余白をタップした時の処理
-//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.didTapView))
-//        view.addGestureRecognizer(tapGestureRecognizer)
+        //        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.didTapView))
+        //        view.addGestureRecognizer(tapGestureRecognizer)
         //追加
         addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
         //削除
@@ -36,10 +36,10 @@ class ViewController: UIViewController {
         
     }
     
-//    @objc func didTapView() {
-//        view.endEditing(true)
-//        //self.view.becomeFirstResponder()
-//    }
+    //    @objc func didTapView() {
+    //        view.endEditing(true)
+    //        //self.view.becomeFirstResponder()
+    //    }
     
     @objc func addButtonPressed(_ sender: UIBarButtonItem) {
         
@@ -62,8 +62,8 @@ class ViewController: UIViewController {
     @objc func deleteButtonPressed(_ sender: UIBarButtonItem) {
         print("delete")
     }
-
-
+    
+    
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableViewCellDelegate, UITextFieldDelegate {
@@ -80,8 +80,15 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         cell.testTextField.delegate = self
         
         if checkList.count != 0 {
-        cell.testTextField.text = checkList[indexPath.row].text
-        cell.checkBoxButton.isSelected = checkList[indexPath.row].check
+            cell.testTextField.text = checkList[indexPath.row].text
+            cell.checkBoxButton.isSelected = checkList[indexPath.row].check
+            //取り消し線の処理
+            if checkList[indexPath.row].check {
+                let str : NSMutableAttributedString = NSMutableAttributedString(string:checkList[indexPath.row].text ?? "")
+                
+                str.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, str.length))
+                cell.testTextField.attributedText = str
+            }
         }
         cell.backgroundColor = .green
         
@@ -93,10 +100,10 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             
             checkList[selectedIndexPath.row].check = !checkList[selectedIndexPath.row].check
             
-            //テストコード
             
-           testTableView.reloadRows(at: [selectedIndexPath], with: .automatic)
-
+            
+            testTableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+            
         }
     }
     
@@ -105,6 +112,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         let indexPath = IndexPath(row: cellCount - 1, section: 0)
         //追加したセル
         let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
+        //キーボードを閉じる処理
+        cell?.testTextField.resignFirstResponder()
         //セルのデータをcheckListに格納する。
         if cell?.testTextField.text != "" {
             //データを入力する
@@ -112,8 +121,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             print("ここを通る:\(indexPath.row)")
             print(checkList)
         }
-        //キーボードを閉じる処理
-        cell?.testTextField.resignFirstResponder()
         
         
         return true
