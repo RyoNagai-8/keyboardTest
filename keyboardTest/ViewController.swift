@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     var deleteButtonItem: UIBarButtonItem!//削除
     var checkList = [Item]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var testCount = 1
+    var cellCount = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,8 +24,8 @@ class ViewController: UIViewController {
         testTableView.dataSource = self
         
         //画面余白をタップした時の処理
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.didTapView))
-        view.addGestureRecognizer(tapGestureRecognizer)
+//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.didTapView))
+//        view.addGestureRecognizer(tapGestureRecognizer)
         //追加
         addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
         //削除
@@ -36,22 +36,20 @@ class ViewController: UIViewController {
         
     }
     
-    @objc func didTapView() {
-        view.endEditing(true)
-        //self.view.becomeFirstResponder()
-    }
+//    @objc func didTapView() {
+//        view.endEditing(true)
+//        //self.view.becomeFirstResponder()
+//    }
     
     @objc func addButtonPressed(_ sender: UIBarButtonItem) {
         
-        testCount += 1
-        
+        cellCount += 1
         //DataModelにデータを入力する。
-//        let newItem = Item(context: self.context)
-//        newItem.check = false
-//        newItem.text = "a"
-//        self.checkList.append(newItem)
+        let newItem = Item(context: self.context)
+        newItem.check = false
+        checkList.append(newItem)
         //追加するデータに対応するインデックスパスを取得する
-        let indexPath = IndexPath(row: testCount - 1, section: 0)
+        let indexPath = IndexPath(row: cellCount - 1, section: 0)
         //追加したデータに対応するセルを挿入する
         testTableView.insertRows(at: [indexPath], with: .automatic)
         //追加したセル
@@ -71,7 +69,7 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableViewCellDelegate, UITextFieldDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return checkList.count
+        return cellCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -81,10 +79,10 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         
         cell.testTextField.delegate = self
         
+        if checkList.count != 0 {
         cell.testTextField.text = checkList[indexPath.row].text
-        
         cell.checkBoxButton.isSelected = checkList[indexPath.row].check
-        
+        }
         cell.backgroundColor = .green
         
         return cell
@@ -104,16 +102,15 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         //追加するデータに対応するインデックスパスを取得する
-        let indexPath = IndexPath(row: checkList.count - 1, section: 0)
+        let indexPath = IndexPath(row: cellCount - 1, section: 0)
         //追加したセル
         let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
         //セルのデータをcheckListに格納する。
         if cell?.testTextField.text != "" {
             //DataModelにデータを入力する。
-            let newItem = Item(context: self.context)
-            newItem.text = cell?.testTextField.text
-            self.checkList.append(newItem)
-            print("ここを通る:\(cell?.textLabel)")
+            self.checkList[indexPath.row].text = cell?.testTextField.text
+            print("ここを通る:\(indexPath.row)")
+            print(checkList)
         }
         
         
