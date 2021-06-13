@@ -112,6 +112,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             print("ここを通る:\(indexPath.row)")
             print(checkList)
         }
+        //キーボードを閉じる処理
+        cell?.testTextField.resignFirstResponder()
         
         
         return true
