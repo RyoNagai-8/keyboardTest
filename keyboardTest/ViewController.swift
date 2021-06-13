@@ -44,7 +44,7 @@ class ViewController: UIViewController {
     @objc func addButtonPressed(_ sender: UIBarButtonItem) {
         
         cellCount += 1
-        //DataModelにデータを入力する。
+        //データを入力する。
         let newItem = Item(context: self.context)
         newItem.check = false
         checkList.append(newItem)
@@ -107,7 +107,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
         //セルのデータをcheckListに格納する。
         if cell?.testTextField.text != "" {
-            //DataModelにデータを入力する。
+            //データを入力する。
             self.checkList[indexPath.row].text = cell?.testTextField.text
             print("ここを通る:\(indexPath.row)")
             print(checkList)
