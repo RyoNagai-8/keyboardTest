@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     var deleteButtonItem: UIBarButtonItem!//削除
     var checkList = [Item]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var cellCount = 0
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +33,7 @@ class ViewController: UIViewController {
         
         self.navigationItem.rightBarButtonItem = addButtonItem
         self.navigationItem.leftBarButtonItem = deleteButtonItem
+        loadCheckList()
         
     }
     
@@ -42,14 +43,12 @@ class ViewController: UIViewController {
     //    }
     
     @objc func addButtonPressed(_ sender: UIBarButtonItem) {
-        
-        cellCount += 1
         //データを入力する
         let newItem = Item(context: self.context)
         newItem.check = false
         checkList.append(newItem)
         //追加するデータに対応するインデックスパスを取得する
-        let indexPath = IndexPath(row: cellCount - 1, section: 0)
+        let indexPath = IndexPath(row: checkList.count - 1, section: 0)
         //追加したデータに対応するセルを挿入する
         testTableView.insertRows(at: [indexPath], with: .automatic)
         //追加したセル
@@ -69,7 +68,7 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableViewCellDelegate, UITextFieldDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cellCount
+        return checkList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -109,7 +108,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         //追加するデータに対応するインデックスパスを取得する
-        let indexPath = IndexPath(row: cellCount - 1, section: 0)
+        let indexPath = IndexPath(row: checkList.count - 1, section: 0)
         //追加したセル
         let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
         //キーボードを閉じる処理
@@ -120,10 +119,38 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             self.checkList[indexPath.row].text = cell?.testTextField.text
             print("ここを通る:\(indexPath.row)")
             print(checkList)
+            self.saveCheckList()
         }
         
         
         return true
+    }
+    
+    //MARK: - CoreData
+    
+    func loadCheckList() {
+        
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        
+        do{
+            checkList = try context.fetch(request)
+        } catch {
+            print("Error loading categories \(error)")
+        }
+       
+        testTableView.reloadData()
+        
+    }
+    
+    func saveCheckList() {
+        do {
+            try context.save()
+        } catch {
+            print("Error saving category \(error)")
+        }
+        
+        testTableView.reloadData()
+        
     }
     
     
