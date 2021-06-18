@@ -99,9 +99,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             
             checkList[selectedIndexPath.row].check = !checkList[selectedIndexPath.row].check
             
-            
-            
             testTableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+            
+            self.saveCheckList()
             
         }
     }
@@ -150,6 +150,26 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         }
         
         testTableView.reloadData()
+        
+    }
+    
+    //MARK: - Delete cell CoreData
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath:IndexPath){
+        if editingStyle == .delete{
+            let task = checkList[indexPath.row]
+            context.delete(task)
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            do {
+                checkList = try context.fetch(Item.fetchRequest())
+            }
+            catch{
+                print("読み込み失敗！")
+            }
+        }
+        loadCheckList()
+        //saveCategories()
+        //tableView.reloadData()
         
     }
     
