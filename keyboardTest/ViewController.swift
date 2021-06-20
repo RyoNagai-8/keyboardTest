@@ -89,7 +89,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
                 cell.testTextField.attributedText = str
             }
         }
-        cell.backgroundColor = .green
+        //cell.backgroundColor = .green
         
         return cell
     }
