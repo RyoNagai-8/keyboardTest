@@ -107,6 +107,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print("textFieldShouldReturn: \(checkList.count)")
         //追加するデータに対応するインデックスパスを取得する
         let indexPath = IndexPath(row: checkList.count - 1, section: 0)
         //追加したセル
@@ -117,9 +118,18 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         if cell?.testTextField.text != "" {
             //データを入力する
             self.checkList[indexPath.row].text = cell?.testTextField.text
-            print("ここを通る:\(indexPath.row)")
-            print(checkList)
             self.saveCheckList()
+        } else {
+            let item = checkList[indexPath.row]
+            context.delete(item)
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            do {
+                checkList = try context.fetch(Item.fetchRequest())
+            }
+            catch{
+                print("Error delete \(error)")
+            }
+            loadCheckList()
         }
         
         
@@ -135,7 +145,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         do{
             checkList = try context.fetch(request)
         } catch {
-            print("Error loading categories \(error)")
+            print("Error loading checklist \(error)")
         }
        
         testTableView.reloadData()
@@ -146,7 +156,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         do {
             try context.save()
         } catch {
-            print("Error saving category \(error)")
+            print("Error saving Item \(error)")
         }
         
         testTableView.reloadData()
@@ -164,12 +174,10 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
                 checkList = try context.fetch(Item.fetchRequest())
             }
             catch{
-                print("読み込み失敗！")
+                print("Error delete \(error)")
             }
         }
         loadCheckList()
-        //saveCategories()
-        //tableView.reloadData()
         
     }
     
