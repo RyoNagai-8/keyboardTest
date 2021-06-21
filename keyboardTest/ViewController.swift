@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     var deleteButtonItem: UIBarButtonItem!//削除
     var checkList = [Item]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let request : NSFetchRequest<Item> = Item.fetchRequest()
     
     
     override func viewDidLoad() {
@@ -59,6 +60,41 @@ class ViewController: UIViewController {
     }
     
     @objc func deleteButtonPressed(_ sender: UIBarButtonItem) {
+        let alert = UIAlertController(title: "すべて削除しますか？", message: "", preferredStyle: .alert)
+        
+        let yes = UIAlertAction(title: "削除", style: .default) { [self] (yes) in
+            do {
+            let data = try context.fetch(request)
+            
+            
+            for task in data {
+                
+                context.delete(task)
+            }
+            self.saveCheckList()
+            
+            
+        }
+        catch{
+            print("読み込み失敗！")
+        }
+            
+            print("削除")
+            self.loadCheckList()
+        }
+        
+        let no = UIAlertAction(title: "キャンセル", style: .default) { (no) in
+            print("キャンセル")
+        }
+        
+        
+        
+        
+        alert.addAction(yes)
+        alert.addAction(no)
+        
+        //画面にアラートを出す。
+        present(alert, animated: true, completion: nil)
         print("delete")
     }
     
@@ -89,7 +125,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
                 cell.testTextField.attributedText = str
             }
         }
-        //cell.backgroundColor = .green
         
         return cell
     }
