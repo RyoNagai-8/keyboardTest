@@ -56,7 +56,8 @@ class ViewController: UIViewController {
         let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
         //追加したセルのテキストフィールドをファーストレスポンダにする
         cell?.testTextField.becomeFirstResponder()
-        //print("add:\(checkList)")
+        //ボタンを非活性にする。
+        addButtonItem.isEnabled = false
     }
     
     @objc func deleteButtonPressed(_ sender: UIBarButtonItem) {
@@ -166,6 +167,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             }
             loadCheckList()
         }
+        //ボタンを活性にする。
+        addButtonItem.isEnabled = true
         
         
         return true
