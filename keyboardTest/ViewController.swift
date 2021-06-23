@@ -44,6 +44,9 @@ class ViewController: UIViewController {
     //    }
     
     @objc func addButtonPressed(_ sender: UIBarButtonItem) {
+        //ボタンを完了に変更する。
+        addButtonItem = UIBarButtonItem(title: "完了", style: .plain, target: self, action: #selector(doneButtonPressed(_:)))
+        self.navigationItem.rightBarButtonItem = addButtonItem
         //データを入力する
         let newItem = Item(context: self.context)
         newItem.check = false
@@ -57,7 +60,40 @@ class ViewController: UIViewController {
         //追加したセルのテキストフィールドをファーストレスポンダにする
         cell?.testTextField.becomeFirstResponder()
         //ボタンを非活性にする。
-        addButtonItem.isEnabled = false
+        //addButtonItem.isEnabled = false
+        print("addButton:\(testTableView.isEditing)")
+        print("addButton2:\(String(describing: cell?.testTextField.becomeFirstResponder()))")
+    }
+    
+    @objc func doneButtonPressed(_ sender: UIBarButtonItem){
+        print("完了")
+        //追加するデータに対応するインデックスパスを取得する
+        let indexPath = IndexPath(row: checkList.count - 1, section: 0)
+        //追加したセル
+        let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
+        //キーボードを閉じる処理
+        cell?.testTextField.resignFirstResponder()
+        //セルのデータをcheckListに格納する。
+        if cell?.testTextField.text != "" {
+            //データを入力する
+            self.checkList[indexPath.row].text = cell?.testTextField.text
+            self.saveCheckList()
+        } else {
+            let item = checkList[indexPath.row]
+            context.delete(item)
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            do {
+                checkList = try context.fetch(Item.fetchRequest())
+            }
+            catch{
+                print("Error delete \(error)")
+            }
+            loadCheckList()
+        }
+        
+        //追加に変更
+        addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
+        self.navigationItem.rightBarButtonItem = addButtonItem
     }
     
     @objc func deleteButtonPressed(_ sender: UIBarButtonItem) {
@@ -167,8 +203,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             }
             loadCheckList()
         }
+        
+        //追加に変更
+        addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
+        self.navigationItem.rightBarButtonItem = addButtonItem
         //ボタンを活性にする。
-        addButtonItem.isEnabled = true
+        //addButtonItem.isEnabled = true
         
         
         return true
@@ -203,6 +243,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
     
     //MARK: - Delete cell CoreData
     
+    
+    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath:IndexPath){
         if editingStyle == .delete{
             let task = checkList[indexPath.row]
@@ -215,9 +257,14 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
                 print("Error delete \(error)")
             }
         }
+        //追加に変更
+        addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
+        self.navigationItem.rightBarButtonItem = addButtonItem
         loadCheckList()
         
     }
+    
+    
     
     
     
