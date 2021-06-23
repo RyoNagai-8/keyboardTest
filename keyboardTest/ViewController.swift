@@ -76,7 +76,7 @@ class ViewController: UIViewController {
             
         }
         catch{
-            print("読み込み失敗！")
+            print("読み込み失敗！:\(error)")
         }
             
             print("削除")
