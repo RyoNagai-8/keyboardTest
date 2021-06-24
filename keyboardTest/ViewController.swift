@@ -154,6 +154,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         if checkList.count != 0 {
             cell.testTextField.text = checkList[indexPath.row].text
             cell.checkBoxButton.isSelected = checkList[indexPath.row].check
+            
             //取り消し線の処理
             if checkList[indexPath.row].check {
                 let str : NSMutableAttributedString = NSMutableAttributedString(string:checkList[indexPath.row].text ?? "")
@@ -250,6 +251,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             let task = checkList[indexPath.row]
             context.delete(task)
             (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            //self.saveCheckList()
             do {
                 checkList = try context.fetch(Item.fetchRequest())
             }
@@ -263,6 +265,17 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         loadCheckList()
         
     }
+    
+    //MARK: - 編集中のセルを削除させないようにする。（下のセル）
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        //indexPath.row == checkList.count - 1  ? .none : .delete
+        if indexPath.row == checkList.count - 1 {
+            return .none
+        } else {
+            return .delete
+        }
+
+        }
     
     
     
