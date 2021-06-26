@@ -166,7 +166,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         
         cell.testTextField.delegate = self
         
-        if checkList.count != 0 {
+        //if checkList.count != 0 {
             cell.testTextField.text = checkList[indexPath.row].text
             cell.checkBoxButton.isSelected = checkList[indexPath.row].check
             
@@ -177,7 +177,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
                 str.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, str.length))
                 cell.testTextField.attributedText = str
             }
-        }
+       // }
         
         return cell
     }
@@ -226,40 +226,33 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        print("textFieldShouldReturn: \(checkList.count)")
+        for num in 0...checkList.count - 1{
         //追加するデータに対応するインデックスパスを取得する
-        //let indexPath = IndexPath(row: checkList.count - 1, section: 0)
+        let indexPath = IndexPath(row: num, section: 0)
+        //let indexPath = IndexPath(row: 0, section: 0)
         //追加したセル
-        //let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
+        let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
+        
+        //セルのデータをcheckListに格納する。
+        if cell?.testTextField.text != "" {
+            //データを入力する
+            self.checkList[indexPath.row].text = cell?.testTextField.text
+        } else {
+            let item = checkList[indexPath.row]
+            context.delete(item)
+
+        }
+            
+        }
+        self.loadCheckList()
+        self.saveCheckList()
         //キーボードを閉じる処理
         //cell?.testTextField.resignFirstResponder()
         view.endEditing(true)
-        //セルのデータをcheckListに格納する。
-//        if cell?.testTextField.text != "" {
-//            //データを入力する
-//            self.checkList[indexPath.row].text = cell?.testTextField.text
-//            self.saveCheckList()
-//        } else {
-//            let item = checkList[indexPath.row]
-//            context.delete(item)
-//            (UIApplication.shared.delegate as! AppDelegate).saveContext()
-//            do {
-//                checkList = try context.fetch(Item.fetchRequest())
-//            }
-//            catch{
-//                print("Error delete \(error)")
-//            }
-//
-//            loadCheckList()
-//        }
         
         //追加に変更
         addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
         self.navigationItem.rightBarButtonItem = addButtonItem
-        //ボタンを活性にする。
-        //addButtonItem.isEnabled = true
-        print("キーボードreturn：\(display)")
-        //print("キーボードreturn：\(indexPath)")
         return true
     }
     
@@ -298,7 +291,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         if editingStyle == .delete{
             let task = checkList[indexPath.row]
             context.delete(task)
-            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            //(UIApplication.shared.delegate as! AppDelegate).saveContext()
             //self.saveCheckList()
             do {
                 checkList = try context.fetch(Item.fetchRequest())

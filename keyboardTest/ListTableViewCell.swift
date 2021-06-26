@@ -34,7 +34,7 @@ class ListTableViewCell: UITableViewCell {
     }
     
     @IBAction func editText(_ sender: UITextField) {
-        delegate?.editTextField(sender: self)
+        //delegate?.editTextField(sender: self)
     }
     
 
