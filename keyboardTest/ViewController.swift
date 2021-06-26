@@ -251,7 +251,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             let task = checkList[indexPath.row]
             context.delete(task)
             (UIApplication.shared.delegate as! AppDelegate).saveContext()
-            //self.saveCheckList()
             do {
                 checkList = try context.fetch(Item.fetchRequest())
             }
