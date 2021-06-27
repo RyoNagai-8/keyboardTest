@@ -77,11 +77,11 @@ class ViewController: UIViewController {
         if cell?.testTextField.text != "" {
             //データを入力する
             self.checkList[indexPath.row].text = cell?.testTextField.text
-            self.saveCheckList()
+            //self.saveCheckList()
         } else {
             let item = checkList[indexPath.row]
             context.delete(item)
-            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            //(UIApplication.shared.delegate as! AppDelegate).saveContext()
             do {
                 checkList = try context.fetch(Item.fetchRequest())
             }
@@ -191,11 +191,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         if cell?.testTextField.text != "" {
             //データを入力する
             self.checkList[indexPath.row].text = cell?.testTextField.text
-            self.saveCheckList()
+            //self.saveCheckList()
         } else {
             let item = checkList[indexPath.row]
             context.delete(item)
-            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            //(UIApplication.shared.delegate as! AppDelegate).saveContext()
             do {
                 checkList = try context.fetch(Item.fetchRequest())
             }
@@ -204,6 +204,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             }
             loadCheckList()
         }
+        //コアデータに保存
+        saveCheckList()
         
         //追加に変更
         addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
@@ -215,7 +217,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         return true
     }
     
-    //MARK: - CoreData
+    //MARK: - CoreData load
     
     func loadCheckList() {
         
@@ -230,7 +232,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         testTableView.reloadData()
         
     }
-    
+    //MARK: - CoreData save
     func saveCheckList() {
         do {
             try context.save()
