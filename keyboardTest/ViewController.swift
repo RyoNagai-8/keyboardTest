@@ -79,7 +79,7 @@ class ViewController: UIViewController {
         //追加したセル
         let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
         //キーボードを閉じる処理
-        cell?.testTextField.resignFirstResponder()
+        //cell?.testTextField.resignFirstResponder()
         print("完了：\(indexPath.row)")
         //セルのデータをcheckListに格納する。
 //        if cell?.testTextField.text != "" {
@@ -98,7 +98,8 @@ class ViewController: UIViewController {
 //            }
 //            loadCheckList()
 //        }
-        
+        //cell?.testTextField.resignFirstResponder()
+        view.endEditing(true)
         //追加に変更
         addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
         self.navigationItem.rightBarButtonItem = addButtonItem
@@ -200,7 +201,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             print("リターンキー：\(selectedIndexPath)")
             //キーボードを閉じる処理
             //sender.testTextField.resignFirstResponder()
-            
+            //sender.testTextField.becomeFirstResponder()
             //セルのデータをcheckListに格納する。
             if sender.testTextField.text != ""{
             checkList[selectedIndexPath.row].text = sender.testTextField.text
@@ -217,38 +218,52 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
                 }
                 
                 loadCheckList()
+                testTableView.reloadData()
             }
             
             
             self.saveCheckList()
             
+            
         }
+        
+        
+    }
+    
+    func editTextFieldBegin(sender: ListTableViewCell) {
+            if let selectedIndexPath = testTableView.indexPath(for: sender){
+                print("Start")
+//                let cell = testTableView.cellForRow(at: selectedIndexPath) as? ListTableViewCell
+                //cell?.testTextField.becomeFirstResponder()
+            }
+        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        for num in 0...checkList.count - 1{
-        //追加するデータに対応するインデックスパスを取得する
-        let indexPath = IndexPath(row: num, section: 0)
-        //let indexPath = IndexPath(row: 0, section: 0)
-        //追加したセル
-        let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
-        
-        //セルのデータをcheckListに格納する。
-        if cell?.testTextField.text != "" {
-            //データを入力する
-            self.checkList[indexPath.row].text = cell?.testTextField.text
-        } else {
-            let item = checkList[indexPath.row]
-            context.delete(item)
-
-        }
-            
-        }
-        self.loadCheckList()
-        self.saveCheckList()
+//        for num in 0...checkList.count - 1{
+//        //追加するデータに対応するインデックスパスを取得する
+//        let indexPath = IndexPath(row: num, section: 0)
+//        //let indexPath = IndexPath(row: 0, section: 0)
+//        //追加したセル
+//        let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
+//
+//        //セルのデータをcheckListに格納する。
+//        if cell?.testTextField.text != "" {
+//            //データを入力する
+//            self.checkList[indexPath.row].text = cell?.testTextField.text
+//        } else {
+//            let item = checkList[indexPath.row]
+//            context.delete(item)
+//
+//        }
+//
+//        }
+//        self.loadCheckList()
+//        self.saveCheckList()
         //キーボードを閉じる処理
         //cell?.testTextField.resignFirstResponder()
-        view.endEditing(true)
+        //view.endEditing(true)
+        
         
         //追加に変更
         addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
@@ -268,7 +283,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             print("Error loading checklist \(error)")
         }
        
-        testTableView.reloadData()
+        //testTableView.reloadData()
         
     }
     
@@ -279,7 +294,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             print("Error saving Item \(error)")
         }
         
-        testTableView.reloadData()
+        //testTableView.reloadData()
         
     }
     
