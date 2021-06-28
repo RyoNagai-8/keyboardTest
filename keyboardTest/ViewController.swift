@@ -39,6 +39,7 @@ class ViewController: UIViewController {
         //キーボード表示の監視
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidAppear), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidDisappear), name: UIResponder.keyboardWillHideNotification, object: nil)
+        //testTableView.tableFooterView = UIView()
         print("キーボード：\(display)")
         loadCheckList()
         
