@@ -178,7 +178,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             
         }
     }
-    
+    //MARK: - キーボードのリターンキーを押した時の処理
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         print("textFieldShouldReturn: \(checkList.count)")
         //追加するデータに対応するインデックスパスを取得する
@@ -245,8 +245,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
     }
     
     //MARK: - Delete cell CoreData
-    
-    
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath:IndexPath){
         if editingStyle == .delete{
