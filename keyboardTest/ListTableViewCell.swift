@@ -10,7 +10,6 @@ import UIKit
 protocol ListTableViewCellDelegate: class {
     func checkBoxToggle(sender: ListTableViewCell)
     func editTextField(sender: ListTableViewCell)
-    func editTextFieldBegin(sender: ListTableViewCell)
 }
 
 class ListTableViewCell: UITableViewCell {
@@ -38,8 +37,5 @@ class ListTableViewCell: UITableViewCell {
         delegate?.editTextField(sender: self)
     }
     
-    @IBAction func editTextBegin(_ sender: UITextField) {
-        //delegate?.editTextFieldBegin(sender: self)
-    }
     
 }

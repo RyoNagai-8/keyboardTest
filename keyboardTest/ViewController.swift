@@ -230,15 +230,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         
     }
     
-    func editTextFieldBegin(sender: ListTableViewCell) {
-            if let selectedIndexPath = testTableView.indexPath(for: sender){
-                print("Start")
-//                let cell = testTableView.cellForRow(at: selectedIndexPath) as? ListTableViewCell
-                //cell?.testTextField.becomeFirstResponder()
-            }
-        
-    }
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 //        for num in 0...checkList.count - 1{
 //        //追加するデータに対応するインデックスパスを取得する
