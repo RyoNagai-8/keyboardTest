@@ -217,10 +217,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
                 catch{
                     print("Error delete \(error)")
                 }
-                
-                //loadCheckList()
-                //データをリロードして、セルのリストを更新する。
-                testTableView.reloadData()
+                //空欄になったセルのデータをリロードする。
+                testTableView.deleteRows(at: [selectedIndexPath], with: .automatic)
             }
             
             
@@ -320,7 +318,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         //追加に変更
         addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
         self.navigationItem.rightBarButtonItem = addButtonItem
-        loadCheckList()
+        //loadCheckList()
+        testTableView.reloadData()
         
     }
     
