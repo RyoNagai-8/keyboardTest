@@ -72,7 +72,8 @@ class ViewController: UIViewController {
         //追加したセル
         let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
         //キーボードを閉じる処理
-        cell?.testTextField.resignFirstResponder()
+        //cell?.testTextField.resignFirstResponder()
+        view.endEditing(true)
         //セルのデータをcheckListに格納する。
         if cell?.testTextField.text != "" {
             //データを入力する
@@ -229,7 +230,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             print("Error loading checklist \(error)")
         }
        
-        testTableView.reloadData()
+        //testTableView.reloadData()
         
     }
     //MARK: - CoreData save
@@ -240,7 +241,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             print("Error saving Item \(error)")
         }
         
-        testTableView.reloadData()
+        //testTableView.reloadData()
         
     }
     
