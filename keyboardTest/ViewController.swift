@@ -81,12 +81,13 @@ class ViewController: UIViewController {
         let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
         //キーボードを閉じる処理
         //cell?.testTextField.resignFirstResponder()
+        view.endEditing(true)
         print("完了：\(indexPath.row)")
         //セルのデータをcheckListに格納する。
         if cell?.testTextField.text != "" {
             //データを入力する
             self.checkList[indexPath.row].text = cell?.testTextField.text
-            //self.saveCheckList()
+            self.saveCheckList()
         } else {
             let item = checkList[indexPath.row]
             context.delete(item)
@@ -251,24 +252,24 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
 //        self.loadCheckList()
 //        self.saveCheckList()
         //キーボードを閉じる処理
-        cell?.testTextField.resignFirstResponder()
+        //cell?.testTextField.resignFirstResponder()
         //セルのデータをcheckListに格納する。
-        if cell?.testTextField.text != "" {
-            //データを入力する
-            self.checkList[indexPath.row].text = cell?.testTextField.text
-            //self.saveCheckList()
-        } else {
-            let item = checkList[indexPath.row]
-            context.delete(item)
-            //(UIApplication.shared.delegate as! AppDelegate).saveContext()
-            do {
-                checkList = try context.fetch(Item.fetchRequest())
-            }
-            catch{
-                print("Error delete \(error)")
-            }
-            loadCheckList()
-        }
+//        if cell?.testTextField.text != "" {
+//            //データを入力する
+//            self.checkList[indexPath.row].text = cell?.testTextField.text
+//            //self.saveCheckList()
+//        } else {
+//            let item = checkList[indexPath.row]
+//            context.delete(item)
+//            //(UIApplication.shared.delegate as! AppDelegate).saveContext()
+//            do {
+//                checkList = try context.fetch(Item.fetchRequest())
+//            }
+//            catch{
+//                print("Error delete \(error)")
+//            }
+//            loadCheckList()
+//        }
         //コアデータに保存
         saveCheckList()
         
