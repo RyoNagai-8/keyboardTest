@@ -218,7 +218,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
                     print("Error delete \(error)")
                 }
                 
-                loadCheckList()
+                //loadCheckList()
+                //データをリロードして、セルのリストを更新する。
                 testTableView.reloadData()
             }
             
