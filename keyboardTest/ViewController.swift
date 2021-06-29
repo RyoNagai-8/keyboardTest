@@ -231,45 +231,30 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        for num in 0...checkList.count - 1{
-//        //追加するデータに対応するインデックスパスを取得する
-//        let indexPath = IndexPath(row: num, section: 0)
-//        //let indexPath = IndexPath(row: 0, section: 0)
-//        //追加したセル
-//        let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
-//
-//        //セルのデータをcheckListに格納する。
-//        if cell?.testTextField.text != "" {
-//            //データを入力する
-//            self.checkList[indexPath.row].text = cell?.testTextField.text
-//        } else {
-//            let item = checkList[indexPath.row]
-//            context.delete(item)
-//
-//        }
-//
-//        }
-//        self.loadCheckList()
-//        self.saveCheckList()
+        //追加するデータに対応するインデックスパスを取得する
+        let indexPath = IndexPath(row: checkList.count - 1, section: 0)
+        //let indexPath = IndexPath(row: 0, section: 0)
+        //追加したセル
+        let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
         //キーボードを閉じる処理
         //cell?.testTextField.resignFirstResponder()
         //セルのデータをcheckListに格納する。
-//        if cell?.testTextField.text != "" {
-//            //データを入力する
-//            self.checkList[indexPath.row].text = cell?.testTextField.text
-//            //self.saveCheckList()
-//        } else {
-//            let item = checkList[indexPath.row]
-//            context.delete(item)
-//            //(UIApplication.shared.delegate as! AppDelegate).saveContext()
-//            do {
-//                checkList = try context.fetch(Item.fetchRequest())
-//            }
-//            catch{
-//                print("Error delete \(error)")
-//            }
-//            loadCheckList()
-//        }
+        if cell?.testTextField.text != "" {
+            //データを入力する
+            self.checkList[indexPath.row].text = cell?.testTextField.text
+            //self.saveCheckList()
+        } else {
+            let item = checkList[indexPath.row]
+            context.delete(item)
+            //(UIApplication.shared.delegate as! AppDelegate).saveContext()
+            do {
+                checkList = try context.fetch(Item.fetchRequest())
+            }
+            catch{
+                print("Error delete \(error)")
+            }
+            loadCheckList()
+        }
         //コアデータに保存
         saveCheckList()
         
