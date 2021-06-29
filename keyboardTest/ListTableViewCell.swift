@@ -9,6 +9,7 @@ import UIKit
 
 protocol ListTableViewCellDelegate: class {
     func checkBoxToggle(sender: ListTableViewCell)
+    func editTextField(sender: ListTableViewCell)
 }
 
 class ListTableViewCell: UITableViewCell {
@@ -32,5 +33,9 @@ class ListTableViewCell: UITableViewCell {
         delegate?.checkBoxToggle(sender: self)
     }
     
-
+    @IBAction func editText(_ sender: UITextField) {
+        delegate?.editTextField(sender: self)
+    }
+    
+    
 }
