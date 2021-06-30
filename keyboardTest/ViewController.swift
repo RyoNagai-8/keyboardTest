@@ -42,6 +42,7 @@ class ViewController: UIViewController {
         //testTableView.tableFooterView = UIView()
         print("キーボード：\(display)")
         loadCheckList()
+        print("リロードした時のcheckList：\(checkList[0].text)")
         
     }
     
@@ -57,6 +58,8 @@ class ViewController: UIViewController {
         //データを入力する
         let newItem = Item(context: self.context)
         newItem.check = false
+        //newItem.textに空文字を代入
+        newItem.text = ""
         checkList.append(newItem)
         //追加するデータに対応するインデックスパスを取得する
         let indexPath = IndexPath(row: checkList.count - 1, section: 0)
@@ -98,6 +101,7 @@ class ViewController: UIViewController {
             }
             //空欄になったセルのデータをリロードする。
             testTableView.deleteRows(at: [indexPath], with: .automatic)
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
             //loadCheckList()
         }
         //キーボードを閉じる処理
@@ -213,7 +217,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             } else {
                 let item = checkList[selectedIndexPath.row]
                 context.delete(item)
-                (UIApplication.shared.delegate as! AppDelegate).saveContext()
+                //(UIApplication.shared.delegate as! AppDelegate).saveContext()
                 do {
                     checkList = try context.fetch(Item.fetchRequest())
                 }
@@ -222,6 +226,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
                 }
                 //空欄になったセルのデータをリロードする。
                 testTableView.deleteRows(at: [selectedIndexPath], with: .automatic)
+                (UIApplication.shared.delegate as! AppDelegate).saveContext()
             }
             
             
@@ -250,6 +255,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             //データを入力する
             let newItem = Item(context: self.context)
             newItem.check = false
+            //newItem.textに空文字を代入
+            newItem.text = ""
             checkList.append(newItem)
             //次に追加するデータに対応するインデックスパスを取得する
             let nextIndexPath = IndexPath(row: checkList.count - 1, section: 0)
@@ -264,7 +271,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             print("TEST")
             let item = checkList[indexPath.row]
             context.delete(item)
-            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            //(UIApplication.shared.delegate as! AppDelegate).saveContext()
             do {
                 checkList = try context.fetch(Item.fetchRequest())
             }
@@ -273,6 +280,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             }
             //空欄になったセルのデータをリロードする。
             testTableView.deleteRows(at: [indexPath], with: .automatic)
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
             //loadCheckList()
             //キーボードを閉じる処理
             view.endEditing(true)
@@ -325,10 +333,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             catch{
                 print("Error delete \(error)")
             }
+            //空欄になったセルのデータをリロードする。
+            testTableView.deleteRows(at: [indexPath], with: .automatic)
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
         }
         //追加に変更
-        addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
-        self.navigationItem.rightBarButtonItem = addButtonItem
+//        addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
+//        self.navigationItem.rightBarButtonItem = addButtonItem
         //loadCheckList()
         //testTableView.reloadData()
         
