@@ -42,7 +42,7 @@ class ViewController: UIViewController {
         //testTableView.tableFooterView = UIView()
         print("キーボード：\(display)")
         loadCheckList()
-        print("リロードした時のcheckList：\(checkList[0].text)")
+        print("リロードした時のcheckList：\(checkList)")
         
     }
     
@@ -92,7 +92,7 @@ class ViewController: UIViewController {
         } else {
             let item = checkList[indexPath.row]
             context.delete(item)
-            //(UIApplication.shared.delegate as! AppDelegate).saveContext()
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
             do {
                 checkList = try context.fetch(Item.fetchRequest())
             }
@@ -101,7 +101,7 @@ class ViewController: UIViewController {
             }
             //空欄になったセルのデータをリロードする。
             testTableView.deleteRows(at: [indexPath], with: .automatic)
-            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            //(UIApplication.shared.delegate as! AppDelegate).saveContext()
             //loadCheckList()
         }
         //キーボードを閉じる処理
@@ -198,7 +198,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             
             testTableView.reloadRows(at: [selectedIndexPath], with: .automatic)
             
-            self.saveCheckList()
+            saveCheckList()
             
         }
     }
@@ -214,10 +214,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             if sender.testTextField.text != ""{
             checkList[selectedIndexPath.row].text = sender.testTextField.text
             //testTableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+            saveCheckList()
             } else {
                 let item = checkList[selectedIndexPath.row]
                 context.delete(item)
-                //(UIApplication.shared.delegate as! AppDelegate).saveContext()
+                (UIApplication.shared.delegate as! AppDelegate).saveContext()
                 do {
                     checkList = try context.fetch(Item.fetchRequest())
                 }
@@ -226,7 +227,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
                 }
                 //空欄になったセルのデータをリロードする。
                 testTableView.deleteRows(at: [selectedIndexPath], with: .automatic)
-                (UIApplication.shared.delegate as! AppDelegate).saveContext()
+                //(UIApplication.shared.delegate as! AppDelegate).saveContext()
             }
             
             
@@ -271,7 +272,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             print("TEST")
             let item = checkList[indexPath.row]
             context.delete(item)
-            //(UIApplication.shared.delegate as! AppDelegate).saveContext()
+            //print("リターンキーを押したときの処理：\(item.text)")
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
             do {
                 checkList = try context.fetch(Item.fetchRequest())
             }
@@ -280,7 +282,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             }
             //空欄になったセルのデータをリロードする。
             testTableView.deleteRows(at: [indexPath], with: .automatic)
-            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            //(UIApplication.shared.delegate as! AppDelegate).saveContext()
             //loadCheckList()
             //キーボードを閉じる処理
             view.endEditing(true)
@@ -325,7 +327,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         if editingStyle == .delete{
             let task = checkList[indexPath.row]
             context.delete(task)
-            //(UIApplication.shared.delegate as! AppDelegate).saveContext()
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
             //self.saveCheckList()
             do {
                 checkList = try context.fetch(Item.fetchRequest())
@@ -335,7 +337,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             }
             //空欄になったセルのデータをリロードする。
             testTableView.deleteRows(at: [indexPath], with: .automatic)
-            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            //(UIApplication.shared.delegate as! AppDelegate).saveContext()
+            //loadCheckList()
         }
         //追加に変更
 //        addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
