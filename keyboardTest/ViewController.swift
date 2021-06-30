@@ -49,7 +49,7 @@ class ViewController: UIViewController {
     //        view.endEditing(true)
     //        //self.view.becomeFirstResponder()
     //    }
-    
+    //MARK: - ナビゲーションバーのAddボタンを押下した時の処理
     @objc func addButtonPressed(_ sender: UIBarButtonItem) {
         //ボタンを完了に変更する。
         addButtonItem = UIBarButtonItem(title: "完了", style: .plain, target: self, action: #selector(doneButtonPressed(_:)))
@@ -61,6 +61,7 @@ class ViewController: UIViewController {
         //追加するデータに対応するインデックスパスを取得する
         let indexPath = IndexPath(row: checkList.count - 1, section: 0)
         //追加したデータに対応するセルを挿入する
+        print("追加：\(indexPath.row)")
         testTableView.insertRows(at: [indexPath], with: .automatic)
         //追加したセル
         let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
@@ -68,20 +69,17 @@ class ViewController: UIViewController {
         cell?.testTextField.becomeFirstResponder()
         //ボタンを非活性にする。
         //addButtonItem.isEnabled = false
-        print("addButton:\(testTableView.isEditing)")
-        print("addButton2:\(String(describing: cell?.testTextField.becomeFirstResponder()))")
-        print("キーボードadd：\(display)")
+//        print("addButton:\(testTableView.isEditing)")
+//        print("addButton2:\(String(describing: cell?.testTextField.becomeFirstResponder()))")
+//        print("キーボードadd：\(display)")
     }
-    
+    //MARK: - ナビゲーションバーの完了ボタンを押下した時の処理
     @objc func doneButtonPressed(_ sender: UIBarButtonItem){
-        print("完了")
+        //print("完了")
         //追加するデータに対応するインデックスパスを取得する
         let indexPath = IndexPath(row: checkList.count - 1, section: 0)
         //追加したセル
         let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
-        //キーボードを閉じる処理
-        //cell?.testTextField.resignFirstResponder()
-        view.endEditing(true)
         print("完了：\(indexPath.row)")
         //セルのデータをcheckListに格納する。
         if cell?.testTextField.text != "" {
@@ -98,14 +96,19 @@ class ViewController: UIViewController {
             catch{
                 print("Error delete \(error)")
             }
-            loadCheckList()
+            //空欄になったセルのデータをリロードする。
+            testTableView.deleteRows(at: [indexPath], with: .automatic)
+            //loadCheckList()
         }
+        //キーボードを閉じる処理
+        //cell?.testTextField.resignFirstResponder()
+        view.endEditing(true)
         
         //追加に変更
         addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
         self.navigationItem.rightBarButtonItem = addButtonItem
     }
-    
+    //MARK: - ナビゲーションバーのゴミ箱ボタンを押下した時の処理
     @objc func deleteButtonPressed(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "すべて削除しますか？", message: "", preferredStyle: .alert)
         
@@ -222,45 +225,62 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             }
             
             
-            self.saveCheckList()
-            
+            //self.saveCheckList()
+            print("デリゲート：\(checkList.count)です")
             
         }
         
         
     }
-    
+    //MARK: - キーボードのリターンキー押下時の処理
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
         //追加するデータに対応するインデックスパスを取得する
         let indexPath = IndexPath(row: checkList.count - 1, section: 0)
         //let indexPath = IndexPath(row: 0, section: 0)
         //追加したセル
         let cell = testTableView.cellForRow(at: indexPath) as? ListTableViewCell
-        //キーボードを閉じる処理
-        //cell?.testTextField.resignFirstResponder()
+        
         //セルのデータをcheckListに格納する。
         if cell?.testTextField.text != "" {
             //データを入力する
             self.checkList[indexPath.row].text = cell?.testTextField.text
-            //self.saveCheckList()
-        } else {
+            self.saveCheckList()
+            self.loadCheckList()
+            //データを入力する
+            let newItem = Item(context: self.context)
+            newItem.check = false
+            checkList.append(newItem)
+            //次に追加するデータに対応するインデックスパスを取得する
+            let nextIndexPath = IndexPath(row: checkList.count - 1, section: 0)
+            //次に追加したデータに対応するセルを挿入する
+            testTableView.insertRows(at: [nextIndexPath], with: .automatic)
+            //次に追加したセル
+            let nextCell = testTableView.cellForRow(at: nextIndexPath) as? ListTableViewCell
+            //次に追加したセルのテキストフィールドをファーストレスポンダにする
+            nextCell?.testTextField.becomeFirstResponder()
+        }
+        else {
+            print("TEST")
             let item = checkList[indexPath.row]
             context.delete(item)
-            //(UIApplication.shared.delegate as! AppDelegate).saveContext()
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
             do {
                 checkList = try context.fetch(Item.fetchRequest())
             }
             catch{
                 print("Error delete \(error)")
             }
-            loadCheckList()
+            //空欄になったセルのデータをリロードする。
+            testTableView.deleteRows(at: [indexPath], with: .automatic)
+            //loadCheckList()
+            //キーボードを閉じる処理
+            view.endEditing(true)
+            //追加に変更
+            addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
+            self.navigationItem.rightBarButtonItem = addButtonItem
         }
-        //コアデータに保存
-        saveCheckList()
         
-        //追加に変更
-        addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
-        self.navigationItem.rightBarButtonItem = addButtonItem
         return true
     }
     
@@ -310,7 +330,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
         self.navigationItem.rightBarButtonItem = addButtonItem
         //loadCheckList()
-        testTableView.reloadData()
+        //testTableView.reloadData()
         
     }
     
