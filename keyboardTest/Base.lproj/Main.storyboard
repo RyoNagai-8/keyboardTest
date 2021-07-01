@@ -34,6 +34,7 @@
                                                     <textInputTraits key="textInputTraits" returnKeyType="next"/>
                                                     <connections>
                                                         <action selector="editText:" destination="iao-CA-pS1" eventType="editingDidEnd" id="P7Q-JH-Uto"/>
+                                                        <action selector="editTextBegin:" destination="iao-CA-pS1" eventType="editingDidBegin" id="nfC-Hx-0KU"/>
                                                     </connections>
                                                 </textField>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uFA-ro-hZU">

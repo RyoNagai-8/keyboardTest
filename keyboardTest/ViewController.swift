@@ -53,8 +53,8 @@ class ViewController: UIViewController {
     //MARK: - ナビゲーションバーのAddボタンを押下した時の処理
     @objc func addButtonPressed(_ sender: UIBarButtonItem) {
         //ボタンを完了に変更する。
-        addButtonItem = UIBarButtonItem(title: "完了", style: .plain, target: self, action: #selector(doneButtonPressed(_:)))
-        self.navigationItem.rightBarButtonItem = addButtonItem
+//        addButtonItem = UIBarButtonItem(title: "完了", style: .plain, target: self, action: #selector(doneButtonPressed(_:)))
+//        self.navigationItem.rightBarButtonItem = addButtonItem
         //データを入力する
         let newItem = Item(context: self.context)
         newItem.check = false
@@ -190,15 +190,29 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         
         return cell
     }
-    
+    //MARK: - チェックボックスをタップした時の処理
     func checkBoxToggle(sender: ListTableViewCell) {
         if let selectedIndexPath = testTableView.indexPath(for: sender){
+            //チェックボックスをタップされたセル
+            let cell = testTableView.cellForRow(at: selectedIndexPath) as? ListTableViewCell
+            //セルの文字を代入
+            checkList[selectedIndexPath.row].text = cell?.testTextField.text
+            
+            if checkList[selectedIndexPath.row].text != ""{
             
             checkList[selectedIndexPath.row].check = !checkList[selectedIndexPath.row].check
             
             testTableView.reloadRows(at: [selectedIndexPath], with: .automatic)
             
             saveCheckList()
+            }
+            
+            if !display {
+                //print("デバックプリント：チェックボックス")
+                //追加に変更
+                addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
+                self.navigationItem.rightBarButtonItem = addButtonItem
+            }
             
         }
     }
@@ -237,6 +251,14 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         
         
     }
+    
+    //MARK: - セル内のテキストフィールドを選択した時の処理
+    func editTextBegin(sender: ListTableViewCell) {
+        //ボタンを完了に変更する。
+        addButtonItem = UIBarButtonItem(title: "完了", style: .plain, target: self, action: #selector(doneButtonPressed(_:)))
+        self.navigationItem.rightBarButtonItem = addButtonItem
+    }
+    
     //MARK: - キーボードのリターンキー押下時の処理
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
