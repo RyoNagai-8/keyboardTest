@@ -42,6 +42,8 @@ class ViewController: UIViewController {
         //testTableView.tableFooterView = UIView()
         print("キーボード：\(display)")
         loadCheckList()
+        //ボタンの非活性を制御する
+        buttonIsEnabled()
         print("リロードした時のcheckList：\(checkList)")
         
     }
@@ -135,6 +137,7 @@ class ViewController: UIViewController {
             
             print("削除")
             self.loadCheckList()
+            testTableView.reloadData()
         }
         
         let no = UIAlertAction(title: "キャンセル", style: .default) { (no) in
@@ -150,6 +153,12 @@ class ViewController: UIViewController {
         //画面にアラートを出す。
         present(alert, animated: true, completion: nil)
         print("delete")
+    }
+    //MARK: - ボタンの非活性を制御する
+    func buttonIsEnabled() {
+        if checkList.count == 0{
+        deleteButtonItem.isEnabled = false
+        }
     }
     
     @objc func keyboardDidAppear() {
