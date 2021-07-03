@@ -42,7 +42,7 @@ class ViewController: UIViewController {
         //testTableView.tableFooterView = UIView()
         print("キーボード：\(display)")
         loadCheckList()
-        //ボタンの非活性を制御する
+        //ゴミ箱ボタンの非活性を制御する
         buttonIsEnabled()
         print("リロードした時のcheckList：\(checkList)")
         
@@ -113,6 +113,8 @@ class ViewController: UIViewController {
         //追加に変更
         addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
         self.navigationItem.rightBarButtonItem = addButtonItem
+        //ゴミ箱ボタンの非活性を制御する
+        buttonIsEnabled()
     }
     //MARK: - ナビゲーションバーのゴミ箱ボタンを押下した時の処理
     @objc func deleteButtonPressed(_ sender: UIBarButtonItem) {
@@ -138,6 +140,8 @@ class ViewController: UIViewController {
             print("削除")
             self.loadCheckList()
             testTableView.reloadData()
+            //ゴミ箱ボタンの非活性を制御する
+            buttonIsEnabled()
         }
         
         let no = UIAlertAction(title: "キャンセル", style: .default) { (no) in
@@ -158,6 +162,8 @@ class ViewController: UIViewController {
     func buttonIsEnabled() {
         if checkList.count == 0{
         deleteButtonItem.isEnabled = false
+        } else {
+            deleteButtonItem.isEnabled = true
         }
     }
     
@@ -321,6 +327,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
             self.navigationItem.rightBarButtonItem = addButtonItem
         }
         
+        //ゴミ箱ボタンの非活性を制御する
+        buttonIsEnabled()
+        
         return true
     }
     
@@ -373,6 +382,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, ListTableV
         //追加に変更
 //        addButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonPressed(_:)))
 //        self.navigationItem.rightBarButtonItem = addButtonItem
+        //ゴミ箱ボタンの非活性を制御する
+        buttonIsEnabled()
         //loadCheckList()
         //testTableView.reloadData()
         
